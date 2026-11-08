@@ -1,0 +1,119 @@
+# Optional helpers for the PVT-B Vigilance Card, as a YAML package.
+#
+# The card works WITHOUT these helpers: its history is stored automatically.
+# Add them only if you want the results in automations, in goal / gauge cards,
+# in Home Assistant's own graphs, or as a permanent backup in the long-term
+# statistics.
+#
+# Easier alternative, no YAML: edit the card and press "Create helpers" at the
+# bottom of the editor (administrators). It creates the same entities, with the
+# same English names, and links them to the card.
+#
+# How to use this package:
+#   1. In configuration.yaml enable packages (once):
+#        homeassistant:
+#          packages: !include_dir_named packages
+#   2. Copy this file to /config/packages/pvt_vigilance.yaml
+#   3. Restart Home Assistant
+#   4. Link the entities in the card editor, or see examples/full.yaml
+
+input_number:
+  pvt_b_score:
+    name: PVT-B Score
+    icon: mdi:lightning-bolt
+    min: 0
+    max: 100
+    step: 1
+    mode: box
+    unit_of_measurement: points
+  pvt_b_mean_time:
+    name: PVT-B Mean time
+    icon: mdi:timer-outline
+    min: 0
+    max: 3000
+    step: 1
+    mode: box
+    unit_of_measurement: ms
+  pvt_b_best_time:
+    name: PVT-B Best time
+    icon: mdi:flash
+    min: 0
+    max: 3000
+    step: 1
+    mode: box
+    unit_of_measurement: ms
+  pvt_b_worst_time:
+    name: PVT-B Worst time
+    icon: mdi:tortoise
+    min: 0
+    max: 3000
+    step: 1
+    mode: box
+    unit_of_measurement: ms
+  pvt_b_lapses:
+    name: PVT-B Lapses
+    icon: mdi:sleep
+    min: 0
+    max: 200
+    step: 1
+    mode: box
+  pvt_b_false_starts:
+    name: PVT-B False starts
+    icon: mdi:gesture-tap
+    min: 0
+    max: 200
+    step: 1
+    mode: box
+
+input_datetime:
+  pvt_b_last_test:
+    name: PVT-B Last test
+    icon: mdi:calendar-clock
+    has_date: true
+    has_time: true
+
+counter:
+  pvt_b_tests:
+    name: PVT-B Tests
+    icon: mdi:counter
+    step: 1
+    minimum: 0
+    restore: true
+
+template:
+  - sensor:
+      # Statistics sensors: a value only in the 90 s after a test, "unknown" otherwise.
+      # Their long-term statistics keep a permanent copy of every result (one row per
+      # test), from which the card can rebuild its history (stat_*_entity options).
+      - name: PVT-B History mean time
+        unique_id: pvt_b_history_mean_time
+        icon: mdi:timer-outline
+        unit_of_measurement: ms
+        state_class: measurement
+        state: "{% set v = states('input_number.pvt_b_mean_time') | float(0) | round(0) | int %}{{ v if v > 0 and (as_timestamp(now()) - (state_attr('input_datetime.pvt_b_last_test', 'timestamp') | float(0))) < 90 else none }}"
+      - name: PVT-B History best time
+        unique_id: pvt_b_history_best_time
+        icon: mdi:flash
+        unit_of_measurement: ms
+        state_class: measurement
+        state: "{% set v = states('input_number.pvt_b_best_time') | float(0) | round(0) | int %}{{ v if v > 0 and (as_timestamp(now()) - (state_attr('input_datetime.pvt_b_last_test', 'timestamp') | float(0))) < 90 else none }}"
+      - name: PVT-B History worst time
+        unique_id: pvt_b_history_worst_time
+        icon: mdi:tortoise
+        unit_of_measurement: ms
+        state_class: measurement
+        state: "{% set v = states('input_number.pvt_b_worst_time') | float(0) | round(0) | int %}{{ v if v > 0 and (as_timestamp(now()) - (state_attr('input_datetime.pvt_b_last_test', 'timestamp') | float(0))) < 90 else none }}"
+      - name: PVT-B History test count
+        unique_id: pvt_b_history_test_count
+        icon: mdi:counter
+        unit_of_measurement: tests
+        state_class: measurement
+        state: "{% set n = states('counter.pvt_b_tests') | int(0) %}{{ n if n > 0 and (as_timestamp(now()) - (state_attr('input_datetime.pvt_b_last_test', 'timestamp') | float(0))) < 90 else none }}"
+      # Today's score, unknown until the first test of the day:
+      # handy as a daily goal ("do the test and score at least 85").
+      - name: PVT-B Score today
+        unique_id: pvt_b_score_today
+        icon: mdi:lightning-bolt
+        unit_of_measurement: points
+        state_class: measurement
+        state: "{{ (states('input_number.pvt_b_score') | float(0) | round(0) | int) if states('input_datetime.pvt_b_last_test')[:10] == now().strftime('%Y-%m-%d') else none }}"

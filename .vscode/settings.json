@@ -1,0 +1,8 @@
+{
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.tabSize": 2,
+  "[markdown]": { "files.trimTrailingWhitespace": false },
+  "yaml.customTags": ["!include_dir_named scalar", "!include scalar", "!secret scalar"]
+}

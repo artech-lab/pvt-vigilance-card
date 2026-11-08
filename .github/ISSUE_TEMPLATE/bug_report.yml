@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Before opening the issue, please reload the dashboard with a cleared cache
+        and check the browser console (F12) for lines starting with `PVT-VIGILANCE-CARD`.
+  - type: input
+    id: card_version
+    attributes:
+      label: Card version
+      description: Printed in the browser console, for example `PVT-VIGILANCE-CARD v2.0.0`.
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.11.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device, browser or companion app
+      placeholder: "Pixel 8 with the Home Assistant app 2026.10 / Firefox 132 on Windows"
+  - type: textarea
+    id: config
+    attributes:
+      label: Card configuration
+      description: The YAML of the card (Edit card > Show code editor).
+      render: yaml
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Browser console output
+      render: text

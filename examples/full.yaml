@@ -1,0 +1,38 @@
+# All options with their default values, plus the optional helpers as created
+# by the editor button "Create helpers" or by examples/packages/pvt_vigilance.yaml
+# (same English names in both cases).
+type: custom:pvt-vigilance-card
+title: Vigilance · PVT-B          # default: localized title
+icon: mdi:lightning-bolt
+
+# Test (PVT-B standard values)
+duration: 180                     # seconds, 30-600
+isi_min: 1                        # seconds between stimuli, minimum
+isi_max: 4                        # seconds between stimuli, maximum
+lapse_ms: 355                     # reaction time counted as a lapse
+warmup: 2                         # first stimuli not scored, 0-5
+offset_touch: 0                   # ms subtracted from touch responses
+offset_mouse: 0                   # ms subtracted from mouse responses
+offset_keyboard: 0                # ms subtracted from Space / Enter responses
+
+# History
+show_history: true
+band_start: 7                     # time-of-day chart: first hour
+band_end: 21                      # time-of-day chart: last hour
+band_size: 2                      # hours per bar
+
+# Optional: also write every result to these helpers (automations, goal cards)
+score_entity: input_number.pvt_b_score
+mean_entity: input_number.pvt_b_mean_time
+best_entity: input_number.pvt_b_best_time
+worst_entity: input_number.pvt_b_worst_time
+lapses_entity: input_number.pvt_b_lapses
+false_entity: input_number.pvt_b_false_starts
+last_entity: input_datetime.pvt_b_last_test
+count_entity: counter.pvt_b_tests
+
+# Optional: statistics sensors, a permanent backup used to rebuild the history
+stat_mean_entity: sensor.pvt_b_history_mean_time
+stat_best_entity: sensor.pvt_b_history_best_time
+stat_worst_entity: sensor.pvt_b_history_worst_time
+stat_count_entity: sensor.pvt_b_history_test_count

@@ -1,0 +1,15 @@
+name: Feature request or translation
+description: Suggest an improvement or a new language
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+      description: For a new language, the strings to translate are in the `PVT_I18N` object of `dist/pvt-vigilance-card.js`. Pull requests are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful?

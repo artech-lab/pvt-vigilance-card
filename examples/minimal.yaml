@@ -1,0 +1,3 @@
+# Minimal configuration: everything else has a sensible default
+# and the history is stored automatically by Home Assistant.
+type: custom:pvt-vigilance-card

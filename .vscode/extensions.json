@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "anthropic.claude-code",
+    "redhat.vscode-yaml",
+    "github.vscode-github-actions"
+  ]
+}

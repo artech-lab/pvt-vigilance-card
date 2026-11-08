@@ -1,0 +1,6 @@
+{
+  "name": "PVT-B Vigilance Card",
+  "filename": "pvt-vigilance-card.js",
+  "render_readme": true,
+  "homeassistant": "2024.8.0"
+}
